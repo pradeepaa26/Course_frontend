@@ -1,0 +1,71 @@
+<app-nav-bar></app-nav-bar>
+<div class="container-fluid">
+    <div>
+        <h2 class="left">Courses</h2>
+        <div class="right">
+            <button class="btn btn-primary" style="margin-right:10px">Edit</button>
+            <button class="btn btn-primary" style="margin-right:10px">Clone</button>
+            <button class="btn btn-primary" style="margin-right:10px">Delete</button>
+            <button class="btn btn-primary" style="margin-right:10px" (click)=back()>Back</button>
+        </div>
+    </div>
+    <hr>
+</div>
+<div *ngFor="let o of object">
+    <div class="center">
+        <div class="alert alert-primary" style="text-align: center;">
+            <b>{{o.name}}</b> - <b>{{o.version}}</b>
+        </div>
+        <div *ngIf=o.levelObj.name><b>level :</b> {{o.levelObj.name}}
+        </div>
+        <div *ngIf=o.categoryObj.name>
+            <b> Category : </b>{{o.categoryObj.name}}
+        </div>
+        <div *ngIf=o.slug>
+            <b> Slug: </b><a href="#">https://qa.revature.com/REV/course/{{o.slug}}</a>
+        </div>
+        <div>
+        <ng-container *ngIf="o.isLevelOverride== false;then override else nonoverride"></ng-container>
+        <ng-template #nonoverride><b>LevelOverride :</b> No</ng-template>
+        <ng-template #override><b>LevelOverride:</b> Yes</ng-template>
+        </div>
+
+        <div>
+            <ng-container *ngIf="o.availableFor==true ; then presignup else second"></ng-container>
+            <ng-template #presignup><b>Available for:</b> Pre sign-up</ng-template>
+            <ng-template #second>
+                <ng-container *ngIf="o.availableFor==false ; then slug else dashboard"></ng-container>
+                <ng-template #slug><b>Available for:</b>Logged in via Slug</ng-template>
+                <ng-template #dashboard><b>Available for:</b>Dashboard</ng-template>
+            </ng-template>
+        </div>
+        <div>
+            <ng-container *ngIf="o.isActive== false;then active else inactive"></ng-container>
+            <ng-template #active><b>Active :</b> No</ng-template>
+            <ng-template #inactive><b>Active :</b> Yes</ng-template>
+        </div>
+        <div *ngIf=o.enrollmentActivityPoints>
+            <b>Enrollment Activity Points: </b>{{o.enrollmentActivityPoints}}
+        </div>
+        <diV *ngIf=o.completionActivityPoints>
+            <b>Completion Activity Points: </b>{{o.completionActivityPoints}}
+        </diV>
+        <div *ngIf=o.tag>
+            <b> Tags:</b> {{o.tag}}
+        </div>
+        <div *ngIf=o.createdBy>
+            <b>Created By:</b> {{o.createdBy}}
+        </div>
+        <div *ngIf=o.createdOn>
+            <b>Created On: </b>{{o.createdOn|date}}
+        </div>
+        <div *ngIf=o.modifiedBy>
+            <b>Modified By:</b> {{o.modifiedBy}}
+        </div>
+        <div *ngIf=o.modifiedOn>
+            <b>Modified On:</b> {{o.modifiedOn|date}}
+        </div>
+
+
+</div>
+</div>

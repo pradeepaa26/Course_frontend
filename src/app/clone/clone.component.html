@@ -1,0 +1,232 @@
+<app-nav-bar></app-nav-bar>
+<!-- <div class="container-fluid"> 
+    <p></p>
+    <div class="row">  
+        <div class="col-8">
+            <h3>Courses</h3>  
+        </div>
+        <div class="col">
+            <button class="btn btn-primary" (click)="onPublish()" >Publish</button>
+            &nbsp;
+            <button class="btn btn-primary">Save And Continue</button>
+            &nbsp;
+            <button class="btn btn-primary">Save As Draft</button>
+            &nbsp;
+            <button class="btn btn-primary" (click)=back()>Back</button>
+            
+        </div>
+    </div> 
+    <hr>
+</div> -->
+<div class="container-fluid">
+    <div>
+    <h2 class="left">Courses</h2>
+    <div class="right">
+    <button class="btn btn-primary" style="margin-right:10px" (click)="onPublish()">Publish</button>
+    <button class="btn btn-primary" style="margin-right:10px">Save and Continue</button>
+    <button class="btn btn-primary" style="margin-right:10px">Save as Draft</button>
+    <button class="btn btn-primary" style="margin-right:10px" (click)="back()">Back</button>
+    </div>
+    </div>
+    <hr>
+</div>
+   
+<div class="container-fluid">
+    <form [formGroup]="cloneForm">
+    <div class="row">
+    <div class="col-3"></div>
+        <div class="col-2">
+            <div class="row">
+                <label class="form-label">Course Name:</label>
+            </div>
+            <br>
+            <div class="row">
+                <label class="form-label">Level:</label>
+            </div>
+            <br>
+            <div class="row">
+                <label class="form-label">Category:</label>
+            </div>
+            <br><br>
+            <div class="row">
+                <label class="form-label">Tags:</label>
+            </div>
+            <br>
+            <div class="row">
+                <label class="form-label">Slug:</label>
+            </div>
+            <br>
+            <div class="row">
+                <label class=" col-form-label">Level Override:</label> 
+            </div>
+            <br>
+            <div class="row">
+                <label class=" col-form-label">Available For:</label> 
+            </div>
+            <br><br>
+            <div class="row">
+                <label class=" col-form-label">Enrollment Activity Points:</label> 
+            </div>
+            <br>
+            <div class="row">
+                <label class=" col-form-label">Completion Activity Points:</label> 
+            </div>
+            <br><br>
+            <div class="row">
+                <label class=" col-form-label">Description:</label> 
+            </div>
+            <br><br><br><br>
+            <div class="row">
+                <label class=" col-form-label">Meta Keyword:</label> 
+            </div>
+            <br><br>
+            <div class="row">
+                <label class=" col-form-label">Meta Description:</label> 
+            </div>
+            <br><br><br><br>
+            <div class="row">
+                <label class=" col-form-label">Choose Icon:</label> 
+            </div>
+
+        </div>
+        <div class="col-3">
+            <div class="row">
+                <input type="text" class="form-control" formControlName="courseName" [(ngModel)]="course_name" />
+            </div>
+            <br>
+            <div class="row">
+                <select class="custom-select" formControlName="level">
+                    <option *ngFor="let level of levels"  [value]="level.id">{{level.name}}</option> 
+                </select>
+            </div>
+            <br>
+            <div class="row">
+                <select class="custom-select" formControlName="category" >
+                    <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
+                </select>
+            </div>
+            <br>
+            <div class="row">
+                <tag-input placeholder="Enter Tags" formControlName="tags" [(ngModel)]="tags"  [modelAsStrings]="true"> </tag-input> 
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-8">
+                <span style="font-size-adjust: 0.35;">https://qa.revature.com/RevaturePro/course</span>
+                </div>
+                <div class="col-4">
+                <input type="text" class="form-control" formControlName="slug" [value]="course_name" />
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <label><input type="radio"  name="levelOverride" formControlName="levelOverride" value="true" /> On&nbsp;&nbsp;</label>
+                <label><input type="radio"  name="levelOverride" formControlName="levelOverride" value="false" /> Off&nbsp;&nbsp;</label>
+            </div>
+            <br>
+            <div class="row">
+                <label class=" col-form-label"  style="font-size-adjust: 0.45;"><input type="checkbox"  formControlName="availableFor" />&nbsp;&nbsp;Pre-Signup</label>&nbsp;&nbsp;
+                <label class=" col-form-label" style="font-size-adjust: 0.45;" ><input type="checkbox"  formControlName="availableFor"/>&nbsp;&nbsp;Logged in users via Slug</label>&nbsp;&nbsp;
+                <label class=" col-form-label"  style="font-size-adjust: 0.45;"><input type="checkbox"  formControlName="availableFor" />&nbsp;&nbsp;Dashboard</label>&nbsp;&nbsp;
+            </div>
+            <br>
+            <div class="row">
+                <input type="number" class="form-control"  value="100"  formControlName="enrollmentActivityPoints" /><br>
+            </div>
+            <br>
+            <div class="row">
+                <input type="number" class="form-control"  value="100"  formControlName="completionActivityPoints"/><br>
+            </div>
+            <br>
+            <div class="row">
+                <textarea rows="4"  class="form-control"  cols="50" formControlName="description"></textarea>
+            </div>
+            <br>
+            <div class="row">
+                <tag-input  placeholder="Enter meta key" formControlName="metaKey" [(ngModel)]="metaKey"  value="tags" [modelAsStrings]="true"></tag-input>
+            </div>
+            <br>
+            <div class="row">
+                <textarea  class="form-control"  rows="4" cols="50" formControlName="metaDescription"></textarea>
+            </div>
+            <br>
+            <div class="row">
+                <input type="file" formControlName="chooseIcon" /><br>
+            </div>
+
+        </div>   
+        <div class="col"></div>
+        <div class="col-3">
+            <br><br><br><br><br><br>
+                <div class="card text-white bg-info mb-3 " style="max-width: 18rem;">
+                <div class="card-header">Documents Attached</div>
+                <div class="card-body">
+                     <p class="card-title"><b>Click to UPDATE</b></p>
+                    <div *ngFor="let doc of listOfDocs">
+                  <p class="card-text"  (click)="openExistingDoc(existingContent,doc)"><u>{{doc.name}}</u></p>
+                </div>
+                </div>
+                <div class="card-footer"><button class="btn btn-primary" (click)="open(content)" >Attach Document</button></div>
+              </div>
+
+        </div> 
+    </div>
+    <ng-template #content let-modal>
+       
+        <div class="modal-header ">
+          <h4 class="modal-title" id="modal-basic-title">Add a Document</h4>
+        </div>
+        <div class="modal-body">
+            <div class ="row">
+                <div col-3></div>
+                <div col-2>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <label class="col-form-label">Name</label>
+                </div>
+                <div class="col-4">
+            <input type="text" class="form-control" formControlName="newEditorName"/>
+                    </div>
+            </div>
+            <br>
+            <!-- <div id="textEditor" style="visibility: hidden;"> -->
+                <ckeditor formControlName="newEditorContentText" [editor]="editor" #editorReference (ready)="onReadyForNewEntry($event)"></ckeditor>
+            <!-- </div> -->
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="saveContent()">Save</button>  
+          <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">Close</button>
+        </div>
+   
+      </ng-template>
+      <!-- List of documents
+      <div *ngFor="let doc of listOfDocs">
+      <p style="color:blue;" (click)="openExistingDoc(existingContent,doc)"><u>{{doc.name}}</u>u></p>
+      </div> -->
+      <ng-template #existingContent let-modal>
+       <div class="modal-header ">
+          <h4 class="modal-title" id="modal-basic-title">edit Document</h4>
+        </div>
+        <div class="modal-body">
+            <div class ="row">
+                <div col-3></div>
+                <div col-2>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <label class="col-form-label">Name</label>
+                </div>
+                <!-- <input type="text" value="come on" class="form-control"  /> -->
+                <div class="col-4">
+            <input type="text" class="form-control"   formControlName="editorName" id="docName" />
+                    </div>
+            </div>
+            <br>
+                <ckeditor id="updateTextEditor" [editor]="editor" formControlName="editorContentText"   (ready)="onReadyForExitstingEntry($event,currentDoc)"></ckeditor>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="saveContent()">Save</button>  
+          <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">Close</button>
+        </div>
+   
+      </ng-template>
+    </form>
+    
+</div>
