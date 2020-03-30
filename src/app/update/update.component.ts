@@ -42,7 +42,9 @@ export class UpdateComponent implements OnInit {
     tags:new FormControl(),
     slug:new FormControl(),
     levelOverride:new FormControl(),
-    availableFor:new FormControl(),
+    presignup:new FormControl(),
+    sluglogin:new FormControl(),
+    dashboard:new FormControl(),
     completionActivityPoints:new FormControl(),
     enrollmentActivityPoints:new FormControl(),
     description:new FormControl(),
@@ -73,17 +75,17 @@ export class UpdateComponent implements OnInit {
     
   }
   viewExistingDataOfChoosenId(){
-console.log("fetched id : ==>"+this.id);
+//console.log("fetched id : ==>"+this.id);
     this.courseService.viewCourseById(this.id).subscribe((res:any)=>{
     this.existingData=res;
-    console.log("existing data  =>"+this.existingData.levelObj.name);
+    //console.log("existing data  =>"+this.existingData.levelObj.name);
     this.loadValueInUpdateForm();//mapping is done
   });
      
   }
   public loadValueInUpdateForm(){
-    console.log("loadvalue function is called"+this.existingData);
-    console.log("level_id=====>"+this.existingData.levelObj.id);
+    //console.log("loadvalue function is called"+this.existingData);
+    console.log(this.existingData);
     //console.log("document id is===>"+this.existingData.docObj[0].id)
     this.createForm.patchValue({
    
@@ -93,7 +95,9 @@ console.log("fetched id : ==>"+this.id);
     slug:this.existingData.slug,
     tags:this.existingData.tag.split(','),
     levelOverride:this.existingData.isLevelOverride,
-    availableFor:this.existingData.availableFor,
+    presignup:this.existingData.isPreSignup,
+    dashboard:this.existingData.isDashboard,
+    sluglogin:this.existingData.isSlugLogin,
     completionActivityPoints:this.existingData.completionActivityPoints,
     enrollmentActivityPoints:this.existingData.enrollmentActivityPoints,
     description:this.existingData.description,

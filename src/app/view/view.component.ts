@@ -77,6 +77,7 @@ export class ViewComponent implements OnInit {
   }
   delete(id:number)
   {
+    console.log("delete called");
   this.returnVal=confirm("Are you sure to delete this course")
   if(this.returnVal)
   {
