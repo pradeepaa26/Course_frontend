@@ -27,14 +27,15 @@ export class UpdateComponent implements OnInit {
   listOfDocs:any;
   currentDoc:any;
   docId:number;
-  courseVideoMapping:Array<any>;
+  courseVideoMapping:Array<any>=[];
   listOfVideos:Array<any>=[];
   listOfAllVideos:Array<any>=[];
   listOfVideosId:Array<number>=[];
   listOfAllVideosId:Array<number>=[];
   videoCheckBoxValuesArray:FormArray;
   videoToBeAddedArray:Array<any>=[];
-  
+  listOfVideosdata:any;
+
   createForm=new FormGroup({
     courseName:new FormControl(),
     version:new FormControl(),
@@ -79,7 +80,7 @@ export class UpdateComponent implements OnInit {
   viewExistingDataOfChoosenId(){
 console.log("fetched id : ==>"+this.id);
     this.courseService.viewCourseById(this.id).subscribe((res:any)=>{
-    this.existingData=res;
+    this.existingData=res.data;
     console.log(this.existingData);
     this.loadValueInUpdateForm();//mapping is done
   });
@@ -104,11 +105,8 @@ console.log("fetched id : ==>"+this.id);
     metaDescription:this.existingData.metaDesc,
     chooseIcon:this.existingData.course_icon,
     mode:this.existingData.mode,
-    // editorText:this.existingData.docObj.content,
-    // editorID:this.existingData.docObj[0].id
     });
    console.log("the content of the metakey-->"+this.createForm.get('metaKey'));
-    // console.log(this.existingData.name);
   }
   public onReadyForNewEntry( editor ) {
     editor.ui.getEditableElement().parentElement.insertBefore(
@@ -128,7 +126,7 @@ public onReadyForExitstingEntry( editor ,doc:any) {
 viewLevels(){
   this.courseService.viewLevel().subscribe(
     (res:any)=>{
-        this.levels=res;
+        this.levels=res.data;
         // console.log(this.levels);
         
     }
@@ -137,7 +135,7 @@ viewLevels(){
 viewCategories(){
   this.courseService.viewCategory().subscribe(
     (res:any) =>{
-      this.categories=res;
+      this.categories=res.data;
     }
   );
 
@@ -166,7 +164,9 @@ onSaveAsDraft(){
     (res)=>{
       console.log(res);
    });
-  //  this.router.navigateByUrl("/view");
+    this.router.navigateByUrl("/view");
+  // console.log(this.createForm.value)
+  // console.log(this.existingData.createdOn)
 }
 open(content) {
   this.modalService.open(content,{
@@ -199,35 +199,31 @@ console.log("the id of the clicked document is==>"+doc.id);
   this.modalService.dismissAll();
       }
       viewExistingDocs(){
-        this.courseService.viewDocByCourseId(this.id).subscribe((res)=>{
-          this.listOfDocs=res;
+        this.courseService.viewDocByCourseId(this.id).subscribe((res:any)=>{
+          this.listOfDocs=res.data;
         });
       }
       viewExistingVideos(){
         console.log("viewExistingVideos function is called..");
-        this.courseService.viewVideoByCourseId(this.id).subscribe((res:Array<any>)=>{
-         this.courseVideoMapping=res;
-          console.log("response is:---------->"+this.courseVideoMapping)
-          console.log("video id=======>"+this.courseVideoMapping[0].videoId)
+        this.courseService.viewVideoByCourseId(this.id).subscribe((res:any)=>{
+         this.courseVideoMapping=res.data;
+         console.log(this.courseVideoMapping);
           this.getVideoById();
-        
         });
-
-       // console.log(this.courseVideoMapping)
-        
         }
         getVideoById(){
           let i=0;
+          console.log(this.courseVideoMapping.length)
           for(i=0;i<this.courseVideoMapping.length;i++){
             this.courseService.viewVideoById(this.courseVideoMapping[i].videoId).subscribe(
-              (res)=>{
+              (res:any)=>{
+                console.log(res);
                 this.listOfVideos.push(res);
-                console.log("here res is===>"+res)
-                console.log("current state of listOfVideos is==>"+this.listOfVideos)
+                console.log(this.listOfVideos);
               }
             );
           }
-          console.log("result==========>"+this.listOfVideos.length);
+          console.log(this.listOfVideos);
          
         }
         viewAllVideos(){

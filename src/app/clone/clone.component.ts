@@ -67,14 +67,14 @@ public editor=classicEditor;
   viewLevels(){
     this.courseService.viewLevel().subscribe(
       (res:any)=>{
-          this.levels=res;
+          this.levels=res.data;
        }
     );
   }
   viewCategories(){
     this.courseService.viewCategory().subscribe(
       (res:any) =>{
-        this.categories=res;
+        this.categories=res.data;
       }
     );
     }
@@ -204,9 +204,6 @@ public editor=classicEditor;
 onPublish(){
   // console.log("text editor==>"+this.editorContent.editorInstance.getData())
   this.cloneForm.value.mode="p";
-  console.log(this.cloneForm.value);
-  console.log(this.docId)
-  console.log(this.videoToBeAddedArray)
   if(this.currentDoc)
   this.docId=this.currentDoc.id;
   else 
@@ -219,10 +216,25 @@ onPublish(){
   this.router.navigate(['view']);   
 
 }
+onDraft()
+{
+  
+  this.cloneForm.value.mode="d";
+  if(this.currentDoc)
+  this.docId=this.currentDoc.id;
+  else 
+  this.docId=null;
+  this.courseService.clone(this.cloneForm.value,this.docId,this.videoToBeAddedArray).subscribe(
+    (res)=>{
+      console.log(res);
+    }
+  );
+  this.router.navigate(['view']); 
+}
 viewExistingDataOfChoosenId(){
   console.log("fetched id : ==>"+this.id);
       this.courseService.viewCourseById(this.id).subscribe((res:any)=>{
-      this.existingData=res;
+      this.existingData=res.data;
       console.log(res);
       this.loadValueInUpdateForm();//mapping is done
     });

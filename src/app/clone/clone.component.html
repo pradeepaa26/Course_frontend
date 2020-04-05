@@ -5,8 +5,8 @@
     <h2 class="left">Courses</h2>
     <div class="right">
     <button class="btn btn-primary" style="margin-right:10px" (click)="onPublish()">Publish</button>
-    <button class="btn btn-primary" style="margin-right:10px">Save and Continue</button>
-    <button class="btn btn-primary" style="margin-right:10px">Save as Draft</button>
+    <button class="btn btn-primary" style="margin-right:10px" (click)="onDraft()">Save and Continue</button>
+    <button class="btn btn-primary" style="margin-right:10px" (click)="onDraft()">Save as Draft</button>
     <button class="btn btn-primary" style="margin-right:10px" (click)="back()">Back</button>
     </div>
     </div>
@@ -124,7 +124,7 @@
                 <label class=" col-form-label">Enrollment Activity Points:</label>
             </div>
             <div class="col-1">
-                <input type="number" value="100" formControlName="enrollmentActivityPoints" /><br>
+                <input type="number" value="100" min=0 onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" formControlName="enrollmentActivityPoints" /><br>
 
             </div>
         </div>
@@ -135,7 +135,7 @@
                 <label class=" col-form-label">Completion Activity Points:</label>
             </div>
             <div class="col-1">
-                <input type="number" value="100" formControlName="completionActivityPoints" /><br>
+                <input type="number" value="100" min=0 onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" formControlName="completionActivityPoints" /><br>
             </div>
         </div>
         <br>

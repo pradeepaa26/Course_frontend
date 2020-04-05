@@ -108,6 +108,7 @@ return this.http.get("http://localhost:5656/courses/viewLevelById"+id)
         name: data.courseName,
         tag:data.tags.toString(),
         slug:data.slug,
+        version:1,
         isLevelOverride:data.levelOverride,
         isPreSignUp:data.isPreSignUp,
         isDashboard:data.isDashboard,

@@ -18,6 +18,8 @@ import { CloneComponent } from './clone/clone.component';
 import { LoginComponent } from './login/login.component';
 import { DetailsComponent } from './details/details.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { VideoPipePipe } from './video-pipe.pipe';
+import { VideodetailsComponent } from './videodetails/videodetails.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +30,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     CloneComponent,
     LoginComponent,
     DetailsComponent,
+    VideoPipePipe,
+    VideodetailsComponent,
     
   ],
   imports: [

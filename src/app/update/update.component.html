@@ -125,7 +125,7 @@
                 <label class=" col-form-label">Enrollment Activity Points:</label>
             </div>
             <div class="col-1">
-                <input type="number" value="100" formControlName="enrollmentActivityPoints" /><br>
+                <input type="number" min=0 onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" formControlName="enrollmentActivityPoints" formControlName="enrollmentActivityPoints" /><br>
 
             </div>
         </div>
@@ -136,7 +136,7 @@
                 <label class=" col-form-label">Completion Activity Points:</label>
             </div>
             <div class="col-1">
-                <input type="number" value="100" formControlName="completionActivityPoints" /><br>
+                <input type="number" min=0 onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" formControlName="enrollmentActivityPoints" formControlName="completionActivityPoints" /><br>
             </div>
         </div>
         <br>

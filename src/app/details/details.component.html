@@ -6,7 +6,7 @@
         <div class="right">
             <button class="btn btn-primary" style="margin-right:10px" (click)="navigatToUpdateComponent(id)">Edit</button>
             <button class="btn btn-primary" style="margin-right:10px" (click)="navigatToCloneComponent(id)">Clone</button>
-            <button class="btn btn-primary" style="margin-right:10px">Delete</button>
+            <button class="btn btn-primary" style="margin-right:10px" (click)="delete(id)">Delete</button>
             <button class="btn btn-primary" style="margin-right:10px" (click)=back()>Back</button>
         </div>
     </div>
@@ -68,11 +68,8 @@
             <b>Modified On:</b> {{courseObject.modifiedOn|date}}
         </div>
 
-
-
-</div>
 <!-- card for disp documents -->
-
+<div *ngIf=courseObject.docObj>
 <div class="card text-white bg-info mb-3 " style="max-width: 18rem;">
     <div class="card-header">Documents Attached</div>
     <div class="card-body">
@@ -80,5 +77,22 @@
       <p class="card-text"><u>{{doc.name}}</u></p>
     </div>
     </div>
-    <div class="card-footer"><button class="btn btn-primary">Attach Document</button></div>
+    </div>
   </div>
+
+  <!-- card for disp videos -->
+  <div *ngIf=courseObject.courseSubscribedVideo>
+    <div class="card text-white bg-info mb-3 " style="max-width: 18rem;">
+        <div class="card-header">Videos Attached</div>
+        <div class="card-body">
+            <div *ngFor="let video of listOfVideos">
+                <div class="row">
+                    <div class="col-8">
+                        <a [routerLink]="['videodetails']" [queryParams]="{id:video.id}"class="card-text" >{{video.name}}</a>
+                    </div>
+                 </div>
+        </div>
+        </div>
+      </div>
+  </div>
+</div>
