@@ -31,7 +31,6 @@ export class ViewComponent implements OnInit {
   view(){
     this.courseService.view().subscribe((res: any) => {
       this.courses=res.data;
-      console.log(this.courses);
     });
   }
     
@@ -39,7 +38,6 @@ export class ViewComponent implements OnInit {
    this.file=event.target.files[0]
     this.courseService.uploadImage(this.file).subscribe((res :any)=>{
       this.result=res;
-      console.log(this.result);
     });
   
   }
@@ -54,14 +52,12 @@ export class ViewComponent implements OnInit {
   }
   onPageChange=(event)=>{
     this.config.currentPage=event;
-    console.log('current page'+this.config.currentPage);
   }
 
   switchStatus(id:number){
 
     this.courseService.switchStatus(id).subscribe((res :any)=>{
       
-      console.log("switching status function has been called");
       this.ngOnInit();
     });
   }
@@ -78,13 +74,11 @@ export class ViewComponent implements OnInit {
 
   delete(id:number)
   {
-    console.log("delete called");
   this.confirmation=confirm("Are you sure to delete this course")
   if(this.confirmation)
   {
     this.courseService.delete(id).subscribe((res:any)=>{
       this.view();
-      console.log("Delete this course");
     },error=>{
       this.view();
       console.log(error)

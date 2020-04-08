@@ -61,19 +61,17 @@ export class CreateComponent implements OnInit {
   }
   onPublish(){
     this.createForm.value.mode="p";
-  // console.log(this.createForm.value)
    this.courseService.insert(this.createForm.value,this.videoToBeAddedArray).subscribe((res:any)=>{
-   
+   this.router.navigateByUrl("/view");
   });
-  this.router.navigateByUrl("/view");                                
+                                  
   }
   onDraft(){
     this.createForm.value.mode="d";
-    // console.log(this.createForm.value);
     this.courseService.insert(this.createForm.value,this.videoToBeAddedArray).subscribe((res:any)=>{
-   
+      this.router.navigateByUrl("/view"); 
     });
-    this.router.navigateByUrl("/view"); 
+   
   }
   public onReady( editor ) {
     editor.ui.getEditableElement().parentElement.insertBefore(
@@ -108,7 +106,6 @@ open(content) {
 }
  saveContent(){
   this.saveEditorContent=true;
-  console.log("save method is called")
   this.modalService.dismissAll();
       }
     viewVideos(){
@@ -119,7 +116,6 @@ open(content) {
       
     }
     onCheckBoxChange(event){
-      console.log("Checkboxchanged method called")
       const formArray: FormArray = this.createForm.get('videoToBeAdded') as FormArray;
       if(event.target.checked){
         formArray.push(new FormControl(event.target.value));
@@ -127,20 +123,16 @@ open(content) {
     }
     addSelectedVideo(){
       const formArray: FormArray = this.createForm.get('videoToBeAdded') as FormArray;
-      console.log("add button is clicked and value===>"+formArray)
       
       for(let i=0;i<formArray.length;i++){
-        console.log("elements are"+formArray.at(i).value)
        let video={
          "videoId":formArray.at(i).value
        }
        this.videoToBeAddedArray.push(video);
     }
-    console.log("resultant array:"+this.videoToBeAddedArray);
     this.modalService.dismissAll();
     }
     openAddVideoModal(content){
-      console.log("open modal is called")
       this.modalService.open(content,{
         size: 'md'
     });

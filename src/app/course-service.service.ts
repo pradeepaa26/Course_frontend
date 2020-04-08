@@ -32,9 +32,9 @@ return this.http.get("http://localhost:5656/courses/viewLevelById"+id)
   viewCourseById(id:number){
     return this.http.get("http://localhost:5656/courses/viewCourseById/"+id);
   }
-  update(data:any,id:number,docId:number,videoToBeAddedArray:Array<any>){
+  update(data:any,id:number,doc:any,videoToBeAddedArray:Array<any>){
     let body={};
-    if(docId!=null){
+    if(doc!=null){
       console.log("updateing existing document")
      body={
      id:id,
@@ -54,14 +54,16 @@ return this.http.get("http://localhost:5656/courses/viewLevelById"+id)
         isSlugLogin:data.isSlugLogin,
         version:data.version,
         docObj: [{
-          "id":docId,
+          "id":doc.id,
           name:data.editorName,
-         content:data.editorContentText
+         content:data.editorContentText,
+         "createdOn":doc.createdOn
         }],
         "courseSubscribedVideo":videoToBeAddedArray,
      levelId:data.level,
       categoryId:data.category,
-      isActive:"true"
+      isActive:"true",
+      createdOn:data.createdon
       };
     }
     else{
@@ -78,6 +80,7 @@ return this.http.get("http://localhost:5656/courses/viewLevelById"+id)
            completionActivityPoints:data.completionActivityPoints,
            enrollmentActivityPoints:data.enrollmentActivityPoints,
            description:data.description,
+           mode:data.mode,
            version:data.version,
            metaKey:data.metaKey.toString(),
            metaDesc:data.metaDescription,
@@ -89,7 +92,8 @@ return this.http.get("http://localhost:5656/courses/viewLevelById"+id)
            "courseSubscribedVideo":videoToBeAddedArray,
         levelId:data.level,
          categoryId:data.category,
-         isActive:"true"
+         isActive:"true",
+         createdOn:data.createdon
          };
 
     }
@@ -142,8 +146,8 @@ return this.http.get("http://localhost:5656/courses/viewLevelById"+id)
       return this.http.post("http://localhost:5656/courses/", body).pipe(map(res => res, { 'headers': headers }));
   }
   
-  clone(data:any,docId:number,videoToBeAddedArray:Array<any>){
-   if(docId!=null){
+  clone(data:any,doc:any,videoToBeAddedArray:Array<any>){
+   if(doc!=null){
    this.textContent=data.editorContentText;
   this.editorName=data.editorName; 
   }
@@ -155,6 +159,8 @@ return this.http.get("http://localhost:5656/courses/viewLevelById"+id)
       name: data.courseName,
       tag:data.tags.toString(),
       slug:data.slug,
+      version:1,
+      mode:data.mode,
       isLevelOverride:data.levelOverride,
       isPreSignUp:data.isPreSignUp,
       isDashboard:data.isDashboard,

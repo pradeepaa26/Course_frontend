@@ -37,6 +37,7 @@ export class UpdateComponent implements OnInit {
   listOfVideosdata:any;
 
   createForm=new FormGroup({
+    createdon:new FormControl(),
     courseName:new FormControl(),
     version:new FormControl(),
     level:new FormControl(),
@@ -59,7 +60,6 @@ export class UpdateComponent implements OnInit {
     editorName:new FormControl(),
     editorContentText:new FormControl(),
     videoToBeAdded:new FormArray([])
-   
   });
   constructor(private router:Router,private courseService:CourseServiceService,private activeroute: ActivatedRoute,private modalService:NgbModal) { }
 
@@ -67,7 +67,6 @@ export class UpdateComponent implements OnInit {
    
     this.activeroute.queryParams.subscribe(params => {
       this.id = params['id'];
-      //console.log("-----------"+params['id'])
     });
     this.viewExistingDataOfChoosenId();
     this.viewLevels();
@@ -78,10 +77,8 @@ export class UpdateComponent implements OnInit {
     
   }
   viewExistingDataOfChoosenId(){
-console.log("fetched id : ==>"+this.id);
     this.courseService.viewCourseById(this.id).subscribe((res:any)=>{
     this.existingData=res.data;
-    console.log(this.existingData);
     this.loadValueInUpdateForm();//mapping is done
   });
      
@@ -105,8 +102,8 @@ console.log("fetched id : ==>"+this.id);
     metaDescription:this.existingData.metaDesc,
     chooseIcon:this.existingData.course_icon,
     mode:this.existingData.mode,
+    createdon:this.existingData.createdOn,
     });
-   console.log("the content of the metakey-->"+this.createForm.get('metaKey'));
   }
   public onReadyForNewEntry( editor ) {
     editor.ui.getEditableElement().parentElement.insertBefore(
@@ -127,7 +124,6 @@ viewLevels(){
   this.courseService.viewLevel().subscribe(
     (res:any)=>{
         this.levels=res.data;
-        // console.log(this.levels);
         
     }
   );
@@ -144,29 +140,23 @@ viewCategories(){
 onSaveAsNewVersion(){
   this.createForm.value.version++;
   this.createForm.value.mode="p";
-  if(this.currentDoc)
-  this.docId=this.currentDoc.id;
-  else 
-  this.docId=null;
-  this.courseService.update(this.createForm.value,this.id,this.docId,this.videoToBeAddedArray).subscribe(
+  if(!this.currentDoc)
+    this.currentDoc=null;
+  this.courseService.update(this.createForm.value,this.id,this.currentDoc,this.videoToBeAddedArray).subscribe(
     (res)=>{
-      console.log(res);
+      this.router.navigateByUrl("/view");
    });
-//  this.router.navigateByUrl("/view");
+ 
 }
 onSaveAsDraft(){
   this.createForm.value.mode="d";
-  if(this.currentDoc)
-  this.docId=this.currentDoc.id;
-  else 
-  this.docId=null;
-  this.courseService.update(this.createForm.value,this.id,this.docId,this.videoToBeAddedArray).subscribe(
+  if(!this.currentDoc)
+  this.currentDoc=null;
+  this.courseService.update(this.createForm.value,this.id,this.currentDoc,this.videoToBeAddedArray).subscribe(
     (res)=>{
-      console.log(res);
+      this.router.navigateByUrl("/view");
    });
-    this.router.navigateByUrl("/view");
-  // console.log(this.createForm.value)
-  // console.log(this.existingData.createdOn)
+   
 }
 open(content) {
   this.modalService.open(content,{
@@ -174,28 +164,21 @@ open(content) {
 });
 }
 openAddVideoModal(content){
-  console.log("open modal is called")
   this.modalService.open(content,{
     size: 'md'
 });
-console.log("inside add video modal, size of listOfvideo"+this.listOfVideos.length)
 for(let i=0;i<this.listOfVideos.length;i++){
   this.listOfVideosId.push(this.listOfVideos[i].id);
-  console.log("listofvideosId"+this.listOfVideos[i].id)
 }
 }
 openExistingDoc(exisingContent,doc:any){
   this.currentDoc=doc;
   
-  console.log("document name==>"+this.currentDoc.name);
-  console.log("modal is being opened")
   this.modalService.open(exisingContent);
   this.createForm.controls['editorName'].setValue(this.currentDoc.name);
-console.log("the id of the clicked document is==>"+doc.id);
 }
  saveContent(){
   this.saveEditorContent=true;
-  console.log("save method is called")
   this.modalService.dismissAll();
       }
       viewExistingDocs(){
@@ -204,26 +187,20 @@ console.log("the id of the clicked document is==>"+doc.id);
         });
       }
       viewExistingVideos(){
-        console.log("viewExistingVideos function is called..");
         this.courseService.viewVideoByCourseId(this.id).subscribe((res:any)=>{
          this.courseVideoMapping=res.data;
-         console.log(this.courseVideoMapping);
           this.getVideoById();
         });
         }
         getVideoById(){
           let i=0;
-          console.log(this.courseVideoMapping.length)
           for(i=0;i<this.courseVideoMapping.length;i++){
             this.courseService.viewVideoById(this.courseVideoMapping[i].videoId).subscribe(
               (res:any)=>{
-                console.log(res);
                 this.listOfVideos.push(res);
-                console.log(this.listOfVideos);
               }
             );
           }
-          console.log(this.listOfVideos);
          
         }
         viewAllVideos(){
@@ -237,7 +214,6 @@ console.log("the id of the clicked document is==>"+doc.id);
           
         }
        onCheckBoxChange(event){
-          console.log("Checkboxchanged method called")
           const formArray: FormArray = this.createForm.get('videoToBeAdded') as FormArray;
           if(event.target.checked){
             formArray.push(new FormControl(event.target.value));
@@ -245,24 +221,18 @@ console.log("the id of the clicked document is==>"+doc.id);
         }
         addSelectedVideo(){
           const formArray: FormArray = this.createForm.get('videoToBeAdded') as FormArray;
-          console.log("add button is clicked and value===>"+formArray)
           
           for(let i=0;i<formArray.length;i++){
-            console.log("elements are"+formArray.at(i).value)
            let video={
              "videoId":formArray.at(i).value
            }
            this.videoToBeAddedArray.push(video);
         }
-        console.log("resultant array:"+this.videoToBeAddedArray);
         this.modalService.dismissAll();
         }
         deleteCourseVideoMapping(id:number){
-          console.log("video id:"+id)
-          console.log("courseVideoMapping is+"+this.courseVideoMapping)
           let courseVideoMappingId;
           for(let i=0;i<this.courseVideoMapping.length;i++){
-            console.log(this.courseVideoMapping[i].videoId+"----->"+id)
             if(this.courseVideoMapping[i].videoId==id)
                 courseVideoMappingId=this.courseVideoMapping[i].id;
           }

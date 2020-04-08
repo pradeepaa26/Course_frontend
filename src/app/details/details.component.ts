@@ -35,7 +35,6 @@ export class DetailsComponent implements OnInit {
       }
   delete(id:number)
       {
-        console.log("delete called");
       this.confirmation=confirm("Are you sure to delete this course")
       if(this.confirmation)
       {
@@ -53,11 +52,8 @@ export class DetailsComponent implements OnInit {
     this.router.navigate(['/clone'],{ queryParams: { id: id} });
   }
   viewExistingVideos(){
-    console.log("viewExistingVideos function is called..");
     this.courseService.viewVideoByCourseId(this.id).subscribe((res:any)=>{
      this.courseVideoMapping=res.data;
-      console.log("response is:---------->"+this.courseVideoMapping)
-      console.log("video id=======>"+this.courseVideoMapping[0].videoId)
       this.getVideoById();
     
     });
@@ -66,17 +62,13 @@ export class DetailsComponent implements OnInit {
     }
     getVideoById(){
       let i=0;
-      console.log(this.courseVideoMapping.length)
       for(i=0;i<this.courseVideoMapping.length;i++){
         this.courseService.viewVideoById(this.courseVideoMapping[i].videoId).subscribe(
           (res:any)=>{
-            console.log(res);
             this.listOfVideos.push(res);
-            console.log(this.listOfVideos);
           }
         );
       }
-      console.log(this.listOfVideos);
      
     }
 }

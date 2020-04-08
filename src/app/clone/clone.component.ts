@@ -14,6 +14,7 @@ id:number;
 public editor=classicEditor;
   constructor(private router:Router,private courseService:CourseServiceService,private activeRoute:ActivatedRoute,private modalService:NgbModal) { }
   cloneForm=new FormGroup({
+    mode:new FormControl(),
     version:new FormControl(),
     courseName:new FormControl(),
     level:new FormControl(),
@@ -98,46 +99,33 @@ public editor=classicEditor;
   });
   }
   openAddVideoModal(content){
-    console.log("open modal is called")
     this.modalService.open(content,{
       size: 'md'
   });
-  console.log("inside add video modal, size of listOfvideo"+this.listOfVideos.length)
   for(let i=0;i<this.listOfVideos.length;i++){
     this.listOfVideosId.push(this.listOfVideos[i].id);
-    console.log("listofvideosId"+this.listOfVideos[i].id)
   }
   }
   openExistingDoc(exisingContent,doc:any){
     this.currentDoc=doc;
-    
-    console.log("document name==>"+this.currentDoc.name);
-    console.log("modal is being opened")
     this.modalService.open(exisingContent);
     this.cloneForm.controls['editorName'].setValue(this.currentDoc.name);
-    console.log("the id of the clicked document is==>"+doc.id);
     }
    saveContent(){
     this.saveEditorContent=true;
-    console.log("save method is called")
     this.modalService.dismissAll();
         }
         viewExistingDocs(){
-          this.courseService.viewDocByCourseId(this.id).subscribe((res)=>{
-            this.listOfDocs=res;
+          this.courseService.viewDocByCourseId(this.id).subscribe((res:any)=>{
+            this.listOfDocs=res.data;
           });
         }
         viewExistingVideos(){
-          console.log("viewExistingVideos function is called..");
-          this.courseService.viewVideoByCourseId(this.id).subscribe((res:Array<any>)=>{
-           this.courseVideoMapping=res;
-            console.log("response is:---------->"+this.courseVideoMapping)
-            console.log("video id=======>"+this.courseVideoMapping[0].videoId)
+          this.courseService.viewVideoByCourseId(this.id).subscribe((res:any)=>{``
+           this.courseVideoMapping=res.data;
             this.getVideoById();
           
           });
-  
-         // console.log(this.courseVideoMapping)
           
           }
           getVideoById(){
@@ -146,13 +134,9 @@ public editor=classicEditor;
               this.courseService.viewVideoById(this.courseVideoMapping[i].videoId).subscribe(
                 (res)=>{
                   this.listOfVideos.push(res);
-                  console.log("here res is===>"+res)
-                  console.log("current state of listOfVideos is==>"+this.listOfVideos)
                 }
               );
             }
-            console.log("result==========>"+this.listOfVideos.length);
-           
           }
           viewAllVideos(){
             this.courseService.viewAllVideos().subscribe(
@@ -165,7 +149,6 @@ public editor=classicEditor;
             
           }
          onCheckBoxChange(event){
-            console.log("Checkboxchanged method called")
             const formArray: FormArray = this.cloneForm.get('videoToBeAdded') as FormArray;
             if(event.target.checked){
               formArray.push(new FormControl(event.target.value));
@@ -173,24 +156,17 @@ public editor=classicEditor;
           }
           addSelectedVideo(){
             const formArray: FormArray = this.cloneForm.get('videoToBeAdded') as FormArray;
-            console.log("add button is clicked and value===>"+formArray)
-            
             for(let i=0;i<formArray.length;i++){
-              console.log("elements are"+formArray.at(i).value)
              let video={
                "videoId":formArray.at(i).value
              }
              this.videoToBeAddedArray.push(video);
           }
-          console.log("resultant array:"+this.videoToBeAddedArray);
           this.modalService.dismissAll();
           }
           deleteCourseVideoMapping(id:number){
-            // console.log("video id:"+id)
-            // console.log("courseVideoMapping is+"+this.courseVideoMapping)
             let courseVideoMappingId;
             for(let i=0;i<this.courseVideoMapping.length;i++){
-              //console.log(this.courseVideoMapping[i].videoId+"----->"+id)
               if(this.courseVideoMapping[i].videoId==id)
                   courseVideoMappingId=this.courseVideoMapping[i].id;
             }
@@ -202,18 +178,17 @@ public editor=classicEditor;
           }
     
 onPublish(){
-  // console.log("text editor==>"+this.editorContent.editorInstance.getData())
   this.cloneForm.value.mode="p";
   if(this.currentDoc)
   this.docId=this.currentDoc.id;
   else 
   this.docId=null;
-  this.courseService.clone(this.cloneForm.value,this.docId,this.videoToBeAddedArray).subscribe(
+  this.courseService.clone(this.cloneForm.value,this.currentDoc,this.videoToBeAddedArray).subscribe(
     (res)=>{
-      console.log(res);
+      this.router.navigateByUrl("/view");  
     }
   );
-  this.router.navigate(['view']);   
+  
 
 }
 onDraft()
@@ -226,24 +201,19 @@ onDraft()
   this.docId=null;
   this.courseService.clone(this.cloneForm.value,this.docId,this.videoToBeAddedArray).subscribe(
     (res)=>{
-      console.log(res);
+      this.router.navigate(['view']); 
     }
   );
-  this.router.navigate(['view']); 
+  
 }
 viewExistingDataOfChoosenId(){
-  console.log("fetched id : ==>"+this.id);
       this.courseService.viewCourseById(this.id).subscribe((res:any)=>{
       this.existingData=res.data;
-      console.log(res);
       this.loadValueInUpdateForm();//mapping is done
     });
        
     }
     public loadValueInUpdateForm(){
-      console.log("loadvalue function is called"+this.existingData);
-      console.log("level_id=====>"+this.existingData.levelObj.id);
-      //console.log("document id is===>"+this.existingData.docObj[0].id)
       this.cloneForm.patchValue({
         version:this.existingData.version,
       courseName:this.existingData.name,
@@ -261,13 +231,9 @@ viewExistingDataOfChoosenId(){
       metaKey:this.existingData.metaKey.split(','),
       metaDescription:this.existingData.metaDesc,
       chooseIcon:this.existingData.course_icon,
-
-      // editorText:this.existingData.docObj.content,
-      // editorID:this.existingData.docObj[0].id
       });
     
     this.cloneForm.controls['courseName'].setValue(this.existingData.name+"(copy)");
-      // console.log(this.existingData.name);
     }
 
 
